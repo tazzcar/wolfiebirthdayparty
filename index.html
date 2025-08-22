@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Magical Celebration!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Parchment & Ink -->
+    <!-- Application Structure Plan: The application is designed as a single, linear-flow webpage that mimics an official invitation scroll. It starts with the thematic invitation text to engage the user, followed immediately by a clear, interactive RSVP form. This structure was chosen for its simplicity and directness, guiding the user from reading the invitation to the required action (RSVPing) without any navigation or distractions. A confirmation message appears upon submission to provide immediate feedback. This approach turns a simple form into a more magical and memorable user experience. -->
+    <!-- Visualization & Content Choices: The source material is a form, so the primary goal is data collection. Instead of charts, the application uses themed HTML and CSS to create an immersive experience. Report Info: Invitation Text -> Goal: Engage -> Presentation: Themed text block with "Cinzel Decorative" font. Report Info: RSVP Questions -> Goal: Collect Data -> Presentation: Interactive HTML form styled with Tailwind CSS to look like part of the parchment. Interaction: User input and a "Send by Owl Post" button click which triggers a confirmation message via JavaScript. Justification: This method is direct, thematic, and more engaging than a standard form. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-image: url('https://github.com/tazzcar/wolfiebirthdayparty/blob/main/Card%20maker%20project-2.png?raw=true$0');
+            background-size: cover;
+            background-position: top;
+        }
+        .font-magic {
+            font-family: 'Cinzel Decorative', cursive;
+        }
+        .form-input {
+            background-color: rgba(255, 251, 235, 0.6);
+            border: 1px solid #a8957d;
+            transition: all 0.3s ease;
+            
+        }
+        .form-input:focus {
+            background-color: rgba(255, 251, 235, 1);
+            border-color: #78552b;
+            box-shadow: 0 0 0 3px rgba(120, 85, 43, 0.2);
+            outline: none;
+        }
+        .btn-primary {
+            background-color: #4a3728;
+            color: #f3e9d8;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #6d513c;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="text-[#4a3728] min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+
+    <main id="invitation-card" class="w-full max-w-2xl" style="background-image: url('https://github.com/tazzcar/wolfiebirthdayparty/blob/47872521594751060941b7b6b8f90bb3af5d5994/Card%20maker%20project.png') required">
+        
+
+        <form id="rsvp-form" class="space-y-6" style= "padding-top: 700px;"">
+            <div>
+                <label for="name" class="block text-sm font-bold mb-2">Name of Witch or Wizard</label>
+                <input type="text" id="name" name="entry.123456789" class="form-input w-full p-3 rounded-md" required placeholder="Ron Weasley">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label for="guest-count" class="block text-sm font-bold mb-2">Total Number of Guests</label>
+                    <input type="number" id="guest-count" name="entry.112233445" min="1" value="1" class="form-input w-full p-3 rounded-md text-center"placeholder="e.g., 1 or 5">
+                </div>
+                <div>
+                    <label for="dietary" class="block text-sm font-bold mb-2">Any Potion Allergies or Dietary Needs?</label>
+                    <input type="text" id="dietary" name="entry.554433221" class="form-input w-full p-3 rounded-md" placeholder="e.g., No nuts, please!">
+                </div>
+            </div>
+            <div class="text-center pt-6">
+                 <p class="text-sm text-center mb-4">Please send your reply by October 20th.</p>
+                <button type="submit" class="btn-primary font-bold py-3 px-8 rounded-full text-lg shadow-lg">
+                    Send by Owl Post
+                </button>
+            </div>
+        </form>
+
+
+        <div id="confirmation" class="hidden text-center py-12">
+            <h2 class="font-magic text-3xl font-bold text-[#6d513c] mb-4">Thank You!</h2>
+            <p class="text-lg">Your owl has been dispatched and your RSVP has been received. We eagerly await your arrival for a magical celebration!</p>
+        </div>
+
+    </main>
+
+    <script>
+        const form = document.getElementById('rsvp-form');
+        const confirmation = document.getElementById('confirmation');
+        
+        const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdZeDW9YKlkUNxEnIraPtIHE-C4xwMllhfX5ypIl0co-TcOOg/viewform'; // PASTE YOUR FORM URL HERE
+        const ENTRY_IDS = {
+            name: 'entry.1167545747', // Replace with your 'Name' entry ID
+            guest_count: 'entry.1558975737', // Replace with your 'Guest Count' entry ID
+            dietary: 'entry.1643633111' // Replace with your 'Dietary Needs' entry ID
+        };
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            
+            const formData = new FormData(form);
+            const params = new URLSearchParams();
+            
+            // Build the URL parameters with the correct entry IDs
+            params.append(ENTRY_IDS.name, formData.get('name'));
+            params.append(ENTRY_IDS.guest_count, formData.get('guest-count'));
+            params.append(ENTRY_IDS.dietary, formData.get('dietary'));
+
+            // Send the data to the Google Form URL
+            fetch(FORM_URL + '?' + params.toString(), {
+                method: 'POST',
+                mode: 'no-cors'
+            }).then(() => {
+                form.classList.add('hidden');
+                document.getElementById('invitation-details').classList.add('hidden');
+                confirmation.classList.remove('hidden');
+            }).catch(error => {
+                console.error('Error submitting form:', error);
+                alert('An error occurred. Please try again or send your RSVP by owl post!');
+            });
+        });
+    </script>
+
+</body>
+</html>
